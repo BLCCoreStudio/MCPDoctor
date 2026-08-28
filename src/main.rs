@@ -12,7 +12,8 @@ fn findings(text: &str) -> Vec<&'static str> {
     {
         out.push("MCP002 shell-capable server command detected");
     }
-    if lower.contains("\"token\"") || lower.contains("\"api_key\"") || lower.contains("\"api-key\"") {
+    if lower.contains("\"token\"") || lower.contains("\"api_key\"") || lower.contains("\"api-key\"")
+    {
         out.push("MCP003 possible inline credential field detected");
     }
     if lower.contains("\"/\"") && (lower.contains("filesystem") || lower.contains("allowed")) {
