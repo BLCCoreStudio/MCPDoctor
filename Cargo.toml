@@ -1,9 +1,9 @@
 [package]
 name = "mcpdoctor"
-version = "0.1.0"
+version = "0.2.0-dev"
 edition = "2021"
 rust-version = "1.74"
-description = "Local security analyzer for MCP configuration files"
+description = "Local MCP configuration diagnostics, security review, and drift checks"
 license = "MIT"
 repository = "https://github.com/BLCCoreStudio/MCPDoctor"
 
