@@ -133,8 +133,8 @@ fn check_baseline(config: &Path, baseline: &Path) -> Result<Option<(usize, usize
 }
 
 fn scan_config(path: &str) -> Result<i32, String> {
-    let text = fs::read_to_string(path)
-        .map_err(|error| format!("failed to read '{path}': {error}"))?;
+    let text =
+        fs::read_to_string(path).map_err(|error| format!("failed to read '{path}': {error}"))?;
     let found = findings(&text);
     if found.is_empty() {
         println!("PASS: no current security/configuration rule matched");
@@ -147,8 +147,8 @@ fn scan_config(path: &str) -> Result<i32, String> {
 }
 
 fn doctor(path: &str) -> Result<i32, String> {
-    let text = fs::read_to_string(path)
-        .map_err(|error| format!("failed to read '{path}': {error}"))?;
+    let text =
+        fs::read_to_string(path).map_err(|error| format!("failed to read '{path}': {error}"))?;
     println!("CONFIG      ✓ readable: {path}");
 
     let found = findings(&text);
@@ -181,10 +181,7 @@ fn doctor(path: &str) -> Result<i32, String> {
 
     println!("NETWORK     · no server process was launched");
     println!("HANDSHAKE   · not performed in safe doctor mode");
-    println!(
-        "RESULT      {}",
-        if failed { "REVIEW" } else { "PASS" }
-    );
+    println!("RESULT      {}", if failed { "REVIEW" } else { "PASS" });
     Ok(if failed { 3 } else { 0 })
 }
 
