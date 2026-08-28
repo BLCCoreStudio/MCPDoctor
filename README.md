@@ -1,42 +1,40 @@
 # MCPDoctor
 
-**Security and configuration analyzer for Model Context Protocol servers and tools.**
+**Local security and configuration analyzer for Model Context Protocol configuration files.**
 
-> **Status:** early development. No stable release has been published.
+> **Status:** development preview. No stable release has been published.
 
 MCPDoctor is a local Rust CLI for reviewing MCP configuration files and surfacing security-relevant signals before those configurations are trusted by an AI client.
 
-## Current development preview
+## Current preview
 
-The first implementation will deliberately start with explainable local checks such as:
-
-- plaintext HTTP endpoints
-- shell-capable server commands
-- possible inline credential fields
-- broad filesystem access indicators
-
-Results are heuristic findings, not proof that a configuration is malicious or safe.
-
-## Planned v0.1
-
-```text
+```bash
 mcpdoctor scan <CONFIG>
 ```
 
-The v0.1 goal is local config inspection with clear rule identifiers, severity, explanations, and script-friendly exit behavior. MCPDoctor will not send configuration data to a remote service.
+The current deterministic checks flag:
+
+- `MCP001` — plaintext HTTP endpoints
+- `MCP002` — shell-capable server commands such as Bash, PowerShell, or `/bin/sh`
+- `MCP003` — possible inline token/API-key fields
+- `MCP004` — possible filesystem-root access indicators
+
+A clean scan prints `PASS`. Findings are reported as warnings and return a non-zero exit status. Read or usage errors are reported separately.
+
+These checks are conservative heuristics. A finding is not proof that a configuration is malicious, and a clean result is not proof that an MCP server or configuration is safe. MCPDoctor performs the current checks locally and does not upload configuration data.
 
 ## Build
 
 Requires Rust 1.74 or newer.
 
 ```bash
-cargo build
-cargo test
+cargo build --locked
+cargo test --locked
 ```
 
 ## Security
 
-See [SECURITY.md](SECURITY.md).
+See [SECURITY.md](SECURITY.md) for reporting guidance and limitations.
 
 ## License
 
