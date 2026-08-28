@@ -1,0 +1,10 @@
+[package]
+name = "mcpdoctor"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+description = "Local security analyzer for MCP configuration files"
+license = "MIT"
+repository = "https://github.com/BLCCoreStudio/MCPDoctor"
+
+[dependencies]
