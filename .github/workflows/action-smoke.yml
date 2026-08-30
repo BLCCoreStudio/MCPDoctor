@@ -1,0 +1,27 @@
+name: Action smoke
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  action-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Create safe MCP fixture
+        shell: bash
+        run: printf '%s\n' '{"command":"git"}' > "$RUNNER_TEMP/mcpdoctor-smoke.json"
+
+      - name: Run MCPDoctor as a local Action
+        uses: ./
+        with:
+          config: ${{ runner.temp }}/mcpdoctor-smoke.json
+          mode: scan
