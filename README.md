@@ -1,114 +1,19 @@
 # MCPDoctor
 
-**Local diagnostics, security review, and configuration-drift checks for Model Context Protocol setups.**
+> **Project status: sunset / discontinued.**
 
-> **Status:** development preview. No stable release has been published.
+BLCCoreStudio has decided to end active development of MCPDoctor as part of a deliberate reduction in project count and maintenance load.
 
-MCPDoctor is a local Rust CLI for answering a practical question: **why does this MCP configuration look risky or fail before the client even launches it?**
+MCPDoctor explored local diagnostics, security review and configuration-drift checks for Model Context Protocol setups. The current implementation remains available for reference, but **no further feature development or routine maintenance is planned**.
 
-The current development line combines:
+This repository may later be made private or removed after the portfolio cleanup is complete.
 
-- deterministic security/configuration checks
-- safe local diagnostics for the configured server command
-- executable discovery through the current `PATH`
-- local configuration baselines and drift detection
+## Why development ended
 
-MCPDoctor does not automatically launch arbitrary MCP server commands in `doctor` mode. That keeps diagnostics predictable while executable probing and protocol handshakes are developed behind explicit opt-in behavior.
+Maintaining MCP-specific diagnostics as a separate product would add another evolving protocol surface and ongoing compatibility burden. BLCCoreStudio is concentrating on a smaller set of projects with clearer long-term ownership.
 
-## Scan a configuration
+## Historical source
 
-```bash
-mcpdoctor scan <CONFIG>
-```
+Previous documentation, implementation details and development history remain available through the Git history.
 
-Current deterministic checks include:
-
-- `MCP001` — plaintext HTTP endpoints
-- `MCP002` — shell-capable server commands such as Bash, PowerShell, or `/bin/sh`
-- `MCP003` — possible inline token/API-key fields
-- `MCP004` — possible filesystem-root access indicators
-
-Findings are review signals, not proof that a configuration or server is malicious.
-
-## Run safe diagnostics
-
-```bash
-mcpdoctor doctor <CONFIG>
-```
-
-The current doctor report checks:
-
-- whether the configuration is readable
-- current MCPDoctor security/configuration rules
-- whether a JSON `command` string can be detected
-- whether that executable can be resolved in the current `PATH`
-- whether additional review is required
-
-Example shape:
-
-```text
-CONFIG      ✓ readable: mcp.json
-SECURITY    ✓ no current rule matched
-COMMAND     ✓ detected: node
-EXECUTABLE  ✓ /usr/bin/node
-NETWORK     · no server process was launched
-HANDSHAKE   · not performed in safe doctor mode
-RESULT      PASS
-```
-
-The explicit `NETWORK` and `HANDSHAKE` lines make current capability boundaries visible rather than implying checks that did not happen.
-
-## Configuration drift baselines
-
-Create a local baseline:
-
-```bash
-mcpdoctor baseline init ~/.config/example/mcp.json ./mcp.baseline
-```
-
-Check for later changes:
-
-```bash
-mcpdoctor baseline check ~/.config/example/mcp.json ./mcp.baseline
-```
-
-Accept the current file as the new baseline:
-
-```bash
-mcpdoctor baseline update ~/.config/example/mcp.json ./mcp.baseline
-```
-
-Baseline updates are written through a temporary file and rename. The current drift check compares bytes and reports the approximate first changed line/byte.
-
-## Relationship to MCPWatch
-
-`MCPWatch` remains a focused companion repository that documents the earlier baseline-monitoring experiment. Its core drift direction is now integrated into MCPDoctor, which is the primary product target for MCP diagnostics and configuration health.
-
-## Exit behavior
-
-- `0` — requested check passed
-- `2` — usage/read/setup failure
-- `3` — review signal, missing executable, or configuration drift detected
-
-## Build
-
-Requires Rust 1.74 or newer.
-
-```bash
-cargo build --locked
-cargo test --locked
-```
-
-## Security model and limitations
-
-- `doctor` currently does not execute the configured server.
-- String extraction intentionally supports a conservative subset of common JSON configuration shapes; it is not a replacement for full MCP schema validation.
-- A clean local scan does not prove that an MCP server is trustworthy or safe at runtime.
-- Baseline equality proves only that the compared files are byte-identical.
-- Protocol initialization, `tools/list`, latency checks, and explicit opt-in server probing are planned future diagnostics and will not be claimed until implemented and testable.
-
-See [SECURITY.md](SECURITY.md) for reporting guidance and limitations.
-
-## License
-
-MIT © BLC Core Studio
+© BLC Core Studio
